@@ -1,0 +1,12 @@
+[[package]]
+name = "mcp"
+version = "1.4.1"
+extras = ["cli"]
+
+[[package]]
+name = "requests"
+version = "2.32.3"
+
+[[package]]
+name = "python-dotenv"
+version = "1.0.1" 

@@ -1,0 +1,24 @@
+[project]
+name = "quickbooksmcp"
+version = "0.1.0"
+description = "An MCP server that interacts with all QuickBooks public APIs."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "mcp[cli]>=1.4.1",
+    "requests>=2.32.3",
+    "python-dotenv>=1.0.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = [
+    "api_importer",
+    "environment",
+    "filesystem",
+    "main_quickbooks_mcp",
+    "quickbooks_interaction"
+] 
