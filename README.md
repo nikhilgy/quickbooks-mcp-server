@@ -1,3 +1,17 @@
+# 🧾 QuickBooks MCP Server
+
+> A secure, local-first Model Context Protocol (MCP) server to query QuickBooks data using natural language inside Claude Desktop.
+
+--- 
+
+## ✅ MCP Review Certification
+
+This MCP Server is **[certified by MCP Review](https://mcpreview.com/mcp-servers/nikhilgy/quickbooks-mcp-server)**.
+
+Being listed and certified on MCP Review ensures this server adheres to MCP standards and best practices, and is trusted by the developer community.
+
+---
+
 ## Requirements:
 1. Python 3.10 or higher
 
@@ -64,4 +78,4 @@ Get all bills from QuickBooks created after 2024-01-01.
 **Query Customers**
 ```text
 Get all customers from QuickBooks.
-``` 
+```
