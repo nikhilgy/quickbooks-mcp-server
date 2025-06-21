@@ -1,0 +1,5 @@
+QUICKBOOKS_CLIENT_ID=your_client_id_here
+QUICKBOOKS_CLIENT_SECRET=your_client_secret_here
+QUICKBOOKS_REFRESH_TOKEN=your_refresh_token_here
+QUICKBOOKS_COMPANY_ID=your_company_id_here
+QUICKBOOKS_ENV=sandbox 
