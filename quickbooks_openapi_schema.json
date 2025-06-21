@@ -1,0 +1,3112 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "QuickBooks Accounts API",
+        "version": "1.0.1",
+        "description": "Read and query account records from QuickBooks Online."
+    },
+    "paths": {
+        "/v3/company/{realmId}/query": {
+            "get": {
+                "summary": "Query QuickBooks entities",
+                "operationId": "queryQuickBooksEntities",
+                "parameters": [
+                    {
+                        "name": "realmId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The QuickBooks company ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "query",
+                        "in": "query",
+                        "required": true,
+                        "description": "SQL-like query to fetch Account, Bill, BillPayments, Customers etc. (e.g. `select * from Account`, `select * from Bill`, `select * from BillPayment`, `select * from Customer`, `select * from Customer maxresults 2 startposition 1`)",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "examples": {
+                            "QueryAccounts": {
+                                "summary": "Query Accounts by CreateTime",
+                                "description": "Fetch all Accounts created after 2014-12-31",
+                                "value": "select * from Account where Metadata.CreateTime > '2014-12-31'"
+                            },
+                            "QueryBills": {
+                                "summary": "Query Bills with pagination",
+                                "description": "Fetch Bill records with maxresults and startposition",
+                                "value": "select * from Bill maxresults 2 startposition 1"
+                            },
+                            "QueryBillPayments": {
+                                "summary": "Query BillPayments with pagination",
+                                "description": "Fetch BillPayment records with maxresults and startposition",
+                                "value": "select * from BillPayment maxresults 2 startposition 1"
+                            },
+                            "QueryBillPaymentsByLastUpdatedTime": {
+                                "summary": "Query BillPayments by LastUpdatedTime",
+                                "description": "Fetch BillPayment records updated after a specific timestamp, ordered by LastUpdatedTime",
+                                "value": "select * from BillPayment Where Metadata.LastUpdatedTime>'2014-12-12T14:50:22-08:00' Order By Metadata.LastUpdatedTime"
+                            },
+                            "QueryCustomers": {
+                                "summary": "Query Customers with pagination",
+                                "description": "Fetch Customer records with maxresults and startposition",
+                                "value": "select * from Customer maxresults 2 startposition 1"
+                            },
+                            "QueryCustomersByLastUpdatedTime": {
+                                "summary": "Query Customers by LastUpdatedTime",
+                                "description": "Fetch Customer records updated after a specific timestamp, ordered by LastUpdatedTime",
+                                "value": "select * from Customer Where Metadata.LastUpdatedTime>'2014-12-12T14:50:22-08:00' Order By Metadata.LastUpdatedTime"
+                            },
+                            "QueryVendors": {
+                                "summary": "Query Vendors with pagination",
+                                "description": "Fetch Vendor records with maxresults and startposition",
+                                "value": "select * from Vendor maxresults 2 startposition 1"
+                            },
+                            "QueryVendorsByLastUpdatedTime": {
+                                "summary": "Query Vendors by LastUpdatedTime",
+                                "description": "Fetch Vendor records updated after a specific timestamp, ordered by LastUpdatedTime",
+                                "value": "select * from Vendor Where Metadata.LastUpdatedTime>'2014-12-12T14:50:22-08:00' Order By Metadata.LastUpdatedTime"
+                            },
+                            "QueryInvoices": {
+                                "summary": "Query Invoices with pagination",
+                                "description": "Fetch Invoice records with maxresults and startposition",
+                                "value": "select * from Invoice maxresults 2 startposition 1"
+                            },
+                            "QueryInvoicesByLastUpdatedTime": {
+                                "summary": "Query Invoices by LastUpdatedTime",
+                                "description": "Fetch Invoice records updated after a specific timestamp, ordered by LastUpdatedTime",
+                                "value": "select * from Invoice Where Metadata.LastUpdatedTime>'2014-12-12T14:50:22-08:00' Order By Metadata.LastUpdatedTime"
+                            },
+                            "QueryTaxAgency": {
+                                "summary": "Query TaxAgency with pagination",
+                                "description": "Fetch TaxAgency records with maxresults and startposition",
+                                "value": "select * from TaxAgency maxresults 2 startposition 1"
+                            },
+                            "QueryPayments": {
+                                "summary": "Query Payments with pagination",
+                                "description": "Fetch Payment records with maxresults and startposition",
+                                "value": "select * from Payment maxresults 2 startposition 1"
+                            },
+                            "QueryItems": {
+                                "summary": "Query Items with pagination",
+                                "description": "Fetch Item records with maxresults and startposition",
+                                "value": "select * from Item maxresults 2 startposition 1"
+                            },
+                            "QueryCompanyInfo": {
+                                "summary": "Query CompanyInfo with pagination",
+                                "description": "Fetch CompanyInfo records with maxresults and startposition",
+                                "value": "select * from CompanyInfo maxresults 2 startposition 1"
+                            },
+                            "QueryEmployees": {
+                                "summary": "Query Employees with pagination",
+                                "description": "Fetch Employee records with maxresults and startposition",
+                                "value": "select * from Employee maxresults 2 startposition 1"
+                            },
+                            "QueryClass": {
+                                "summary": "Query Classes with pagination",
+                                "description": "Fetch Class records with maxresults and startposition",
+                                "value": "select * from Class maxresults 2 startposition 1"
+                            },
+                            "QueryDepartments": {
+                                "summary": "Query Departments with pagination",
+                                "description": "Fetch Department records with maxresults and startposition",
+                                "value": "select * from Department maxresults 2 startposition 1"
+                            },
+                            "QueryJournalEntries": {
+                                "summary": "Query JournalEntries with pagination",
+                                "description": "Fetch JournalEntry records with maxresults and startposition",
+                                "value": "select * from JournalEntry maxresults 2 startposition 1"
+                            },
+                            "QueryEstimates": {
+                                "summary": "Query Estimates with pagination",
+                                "description": "Fetch Estimate records with maxresults and startposition",
+                                "value": "select * from Estimate maxresults 2 startposition 1"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Query result containing Account list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/QueryAccountsResponse"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/QueryBillsResponse"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/QueryBillPaymentsResponse"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/QueryCustomersResponse"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/QueryVendorsResponse"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/QueryInvoiceResponse"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/TaxAgencyQueryResponse"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/PaymentQueryResponse"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Item"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/CompanyInfo"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/Employee"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/QueryClassResponse"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/QueryDepartmentResponse"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/QueryJournalEntryResponse"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/QueryEstimateResponse"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid query or realm ID"
+                    },
+                    "401": {
+                        "description": "Unauthorized. Token may be missing or expired."
+                    },
+                    "422": {
+                        "description": "Validation failed for the request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/v3/company/{realmId}/account/{accountId}": {
+            "get": {
+                "summary": "Read an Account",
+                "operationId": "getAccountById",
+                "tags": [
+                    "Accounts"
+                ],
+                "parameters": [
+                    {
+                        "name": "realmId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The QuickBooks company ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the account to retrieve",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The requested Account object",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReadAccountResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid account ID or realm ID"
+                    },
+                    "401": {
+                        "description": "Unauthorized. Token may be missing or expired."
+                    },
+                    "404": {
+                        "description": "Account not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/v3/company/{realmId}/bill/{billId}": {
+            "get": {
+                "summary": "Read a Bill",
+                "operationId": "readBillById",
+                "tags": [
+                    "Bills"
+                ],
+                "parameters": [
+                    {
+                        "name": "realmId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The QuickBooks company ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "billId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the bill to retrieve",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The requested Bill object",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReadBillResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid bill ID or realm ID"
+                    },
+                    "401": {
+                        "description": "Unauthorized. Token may be missing or expired."
+                    },
+                    "404": {
+                        "description": "Bill not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/v3/company/{realmId}/billpayment/{billpaymentId}": {
+            "get": {
+                "summary": "Read a BillPayment",
+                "operationId": "readBillPaymentById",
+                "tags": [
+                    "BillPayments"
+                ],
+                "parameters": [
+                    {
+                        "name": "realmId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The QuickBooks company ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "billpaymentId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the BillPayment to retrieve",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The requested BillPayment object",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReadBillPaymentResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid billpayment ID or realm ID"
+                    },
+                    "401": {
+                        "description": "Unauthorized. Token may be missing or expired."
+                    },
+                    "404": {
+                        "description": "BillPayment not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/v3/company/{realmId}/customer/{customerId}": {
+            "get": {
+                "summary": "Read a Customer",
+                "operationId": "readCustomerById",
+                "tags": [
+                    "Customers"
+                ],
+                "parameters": [
+                    {
+                        "name": "realmId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The QuickBooks company ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "customerId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the customer to retrieve",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The requested Customer object",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReadCustomerResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid customer ID or realm ID"
+                    },
+                    "401": {
+                        "description": "Unauthorized. Token may be missing or expired."
+                    },
+                    "404": {
+                        "description": "Customer not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/v3/company/{realmId}/vendor/{vendorId}": {
+            "get": {
+                "summary": "Read a Vendor",
+                "operationId": "readVendorById",
+                "tags": [
+                    "Vendors"
+                ],
+                "parameters": [
+                    {
+                        "name": "realmId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The QuickBooks company ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "vendorId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the vendor to retrieve",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The requested Vendor object",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReadVendorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid vendor ID or realm ID"
+                    },
+                    "401": {
+                        "description": "Unauthorized. Token may be missing or expired."
+                    },
+                    "404": {
+                        "description": "Vendor not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/v3/company/{realmId}/taxagency/{taxagencyId}": {
+            "get": {
+                "summary": "Read a TaxAgency",
+                "description": "Retrieves a single TaxAgency object by ID.",
+                "parameters": [
+                    {
+                        "name": "realmId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "QuickBooks company ID"
+                    },
+                    {
+                        "name": "taxagencyId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "ID of the TaxAgency object"
+                    },
+                    {
+                        "name": "minorversion",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "75"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "TaxAgency object",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TaxAgencyResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v3/company/{realmId}/payment/{paymentId}": {
+            "get": {
+                "summary": "Read a Payment",
+                "description": "Retrieves a single Payment object by ID.",
+                "parameters": [
+                    {
+                        "name": "realmId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "paymentId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "minorversion",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "75"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Payment object",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaymentResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v3/company/{realmId}/item/{itemId}": {
+            "get": {
+                "summary": "Read an item (by ID)",
+                "description": "Fetches the full details of an item (Inventory, Group/Bundle, Category, Service, or NonInventory) using the Item ID.",
+                "parameters": [
+                    {
+                        "name": "realmId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "minorversion",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "75"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v3/company/{realmId}/employee/{employeeId}": {
+            "get": {
+                "summary": "Read Employee",
+                "description": "Retrieves a single Employee object by ID.",
+                "parameters": [
+                    {
+                        "name": "realmId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "employeeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "minorversion",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "75"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Employee retrieved",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EmployeeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v3/company/{realmId}/class/{classId}": {
+            "get": {
+                "summary": "Read a Class",
+                "operationId": "getClassById",
+                "tags": [
+                    "Class"
+                ],
+                "parameters": [
+                    {
+                        "name": "realmId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The QuickBooks company ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "classId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the Class to retrieve",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The requested Class object",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReadClassResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid class ID or realm ID"
+                    },
+                    "401": {
+                        "description": "Unauthorized. Token may be missing or expired."
+                    },
+                    "404": {
+                        "description": "Class not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/v3/company/{realmId}/department/{departmentId}": {
+            "get": {
+                "summary": "Read a Department",
+                "operationId": "getDepartmentById",
+                "tags": [
+                    "Department"
+                ],
+                "parameters": [
+                    {
+                        "name": "realmId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The QuickBooks company ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "departmentId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the Department to retrieve",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The requested Department object",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReadDepartmentResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid department ID or realm ID"
+                    },
+                    "401": {
+                        "description": "Unauthorized. Token may be missing or expired."
+                    },
+                    "404": {
+                        "description": "Department not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/v3/company/{realmId}/journalentry/{journalEntryId}": {
+            "get": {
+                "summary": "Read a JournalEntry",
+                "operationId": "getJournalEntryById",
+                "tags": [
+                    "JournalEntry"
+                ],
+                "parameters": [
+                    {
+                        "name": "realmId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The QuickBooks company ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "journalEntryId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the JournalEntry to retrieve",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The requested JournalEntry object",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReadJournalEntryResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid journal entry ID or realm ID"
+                    },
+                    "401": {
+                        "description": "Unauthorized. Token may be missing or expired."
+                    },
+                    "404": {
+                        "description": "JournalEntry not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/v3/company/{realmId}/estimate/{estimateId}": {
+            "get": {
+                "summary": "Read an Estimate",
+                "operationId": "getEstimateById",
+                "tags": [
+                    "Estimate"
+                ],
+                "parameters": [
+                    {
+                        "name": "realmId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The QuickBooks company ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "estimateId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The ID of the Estimate to retrieve",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The requested Estimate object",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReadEstimateResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid estimate ID or realm ID"
+                    },
+                    "401": {
+                        "description": "Unauthorized. Token may be missing or expired."
+                    },
+                    "404": {
+                        "description": "Estimate not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/v3/company/{realmId}/preferences": {
+            "get": {
+                "summary": "Read Preferences",
+                "operationId": "getPreferences",
+                "tags": [
+                    "Preferences"
+                ],
+                "parameters": [
+                    {
+                        "name": "realmId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The QuickBooks company ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The company's Preferences object",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Preferences"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized. Token may be missing or expired."
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/v3/company/{realmId}/reports/ProfitAndLoss": {
+            "get": {
+                "summary": "Read a ProfitAndLoss report",
+                "operationId": "getProfitAndLossReport",
+                "tags": [
+                    "Reports"
+                ],
+                "parameters": [
+                    {
+                        "name": "realmId",
+                        "in": "path",
+                        "required": true,
+                        "description": "The QuickBooks company ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "required": false,
+                        "description": "The start date of the report, in the format YYYY-MM-DD.",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "required": false,
+                        "description": "The end date of the report, in the format YYYY-MM-DD.",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "accounting_method",
+                        "in": "query",
+                        "required": false,
+                        "description": "The accounting method used in the report.",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Accrual",
+                                "Cash"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "customer",
+                        "in": "query",
+                        "required": false,
+                        "description": "Filters report contents to include information for specified customers. One or more comma separated customer IDs.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "qzurl",
+                        "in": "query",
+                        "required": false,
+                        "description": "Specifies whether Quick Zoom URL information should be generated for rows in the report.",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "true",
+                                "false"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "date_macro",
+                        "in": "query",
+                        "required": false,
+                        "description": "Predefined date range.",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Today",
+                                "Yesterday",
+                                "This Week",
+                                "Last Week",
+                                "This Week-to-date",
+                                "Last Week-to-date",
+                                "Next Week",
+                                "Next 4 Weeks",
+                                "This Month",
+                                "Last Month",
+                                "This Month-to-date",
+                                "Last Month-to-date",
+                                "Next Month",
+                                "This Fiscal Quarter",
+                                "Last Fiscal Quarter",
+                                "This Fiscal Quarter-to-date",
+                                "Last Fiscal Quarter-to-date",
+                                "Next Fiscal Quarter",
+                                "This Fiscal Year",
+                                "Last Fiscal Year",
+                                "This Fiscal Year-to-date",
+                                "Last Fiscal Year-to-date",
+                                "Next Fiscal Year"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "adjusted_gain_loss",
+                        "in": "query",
+                        "required": false,
+                        "description": "Specifies whether unrealized gain and losses are included in the report.",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "true",
+                                "false"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "class",
+                        "in": "query",
+                        "required": false,
+                        "description": "Filters report contents to include information for specified classes. One or more comma separated class IDs.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "item",
+                        "in": "query",
+                        "required": false,
+                        "description": "Filters report contents to include information for specified items. One or more comma separated item IDs.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "required": false,
+                        "description": "The sort order.",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ascend",
+                                "descend"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "summarize_column_by",
+                        "in": "query",
+                        "required": false,
+                        "description": "The criteria by which to group the report results.",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Total",
+                                "Month",
+                                "Week",
+                                "Days",
+                                "Quarter",
+                                "Year",
+                                "Customers",
+                                "Vendors",
+                                "Classes",
+                                "Departments",
+                                "Employees",
+                                "ProductsAndServices"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "department",
+                        "in": "query",
+                        "required": false,
+                        "description": "Filters report contents to include information for specified departments. One or more comma separated department IDs.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "vendor",
+                        "in": "query",
+                        "required": false,
+                        "description": "Filters report contents to include information for specified vendors. One or more comma separated vendor IDs.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "minorversion",
+                        "in": "query",
+                        "required": false,
+                        "description": "The minor version of the API.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The Profit and Loss report",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProfitAndLossReport"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized. Token may be missing or expired."
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "QueryAccountsResponse": {
+                "type": "object",
+                "properties": {
+                    "QueryResponse": {
+                        "type": "object",
+                        "properties": {
+                            "startPosition": {
+                                "type": "integer"
+                            },
+                            "maxResults": {
+                                "type": "integer"
+                            },
+                            "Account": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Account"
+                                }
+                            }
+                        }
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "ReadAccountResponse": {
+                "type": "object",
+                "properties": {
+                    "Account": {
+                        "$ref": "#/components/schemas/Account"
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Account": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string",
+                        "description": "Unique ID of the account"
+                    },
+                    "Name": {
+                        "type": "string"
+                    },
+                    "FullyQualifiedName": {
+                        "type": "string"
+                    },
+                    "AccountType": {
+                        "type": "string"
+                    },
+                    "AccountSubType": {
+                        "type": "string"
+                    },
+                    "Classification": {
+                        "type": "string"
+                    },
+                    "CurrentBalance": {
+                        "type": "number"
+                    },
+                    "CurrentBalanceWithSubAccounts": {
+                        "type": "number"
+                    },
+                    "CurrencyRef": {
+                        "$ref": "#/components/schemas/CurrencyRef"
+                    },
+                    "MetaData": {
+                        "$ref": "#/components/schemas/MetaData"
+                    },
+                    "Active": {
+                        "type": "boolean"
+                    },
+                    "domain": {
+                        "type": "string"
+                    },
+                    "SyncToken": {
+                        "type": "string"
+                    },
+                    "SubAccount": {
+                        "type": "boolean"
+                    },
+                    "sparse": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "CurrencyRef": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    }
+                }
+            },
+            "MetaData": {
+                "type": "object",
+                "properties": {
+                    "CreateTime": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "LastUpdatedTime": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "QueryBillsResponse": {
+                "type": "object",
+                "properties": {
+                    "QueryResponse": {
+                        "type": "object",
+                        "properties": {
+                            "startPosition": {
+                                "type": "integer"
+                            },
+                            "totalCount": {
+                                "type": "integer"
+                            },
+                            "maxResults": {
+                                "type": "integer"
+                            },
+                            "Bill": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Bill"
+                                }
+                            }
+                        }
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Bill": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string"
+                    },
+                    "SyncToken": {
+                        "type": "string"
+                    },
+                    "domain": {
+                        "type": "string"
+                    },
+                    "VendorRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "APAccountRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "TxnDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "DueDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "CurrencyRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "SalesTermRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "LinkedTxn": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/LinkedTxn"
+                        }
+                    },
+                    "Line": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BillLine"
+                        }
+                    },
+                    "TotalAmt": {
+                        "type": "number"
+                    },
+                    "Balance": {
+                        "type": "number"
+                    },
+                    "MetaData": {
+                        "$ref": "#/components/schemas/MetaData"
+                    },
+                    "sparse": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "ReferenceType": {
+                "type": "object",
+                "properties": {
+                    "value": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "LinkedTxn": {
+                "type": "object",
+                "properties": {
+                    "TxnId": {
+                        "type": "string"
+                    },
+                    "TxnType": {
+                        "type": "string"
+                    }
+                }
+            },
+            "BillLine": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string"
+                    },
+                    "Amount": {
+                        "type": "number"
+                    },
+                    "Description": {
+                        "type": "string"
+                    },
+                    "DetailType": {
+                        "type": "string"
+                    },
+                    "ItemBasedExpenseLineDetail": {
+                        "$ref": "#/components/schemas/ItemBasedExpenseLineDetail"
+                    },
+                    "AccountBasedExpenseLineDetail": {
+                        "$ref": "#/components/schemas/AccountBasedExpenseLineDetail"
+                    }
+                }
+            },
+            "ItemBasedExpenseLineDetail": {
+                "type": "object",
+                "properties": {
+                    "TaxCodeRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "Qty": {
+                        "type": "number"
+                    },
+                    "UnitPrice": {
+                        "type": "number"
+                    },
+                    "ItemRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "BillableStatus": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AccountBasedExpenseLineDetail": {
+                "type": "object",
+                "properties": {
+                    "TaxCodeRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "AccountRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "CustomerRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "ProjectRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "BillableStatus": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ReadBillResponse": {
+                "type": "object",
+                "properties": {
+                    "Bill": {
+                        "$ref": "#/components/schemas/Bill"
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "QueryBillPaymentsResponse": {
+                "type": "object",
+                "properties": {
+                    "QueryResponse": {
+                        "type": "object",
+                        "properties": {
+                            "startPosition": {
+                                "type": "integer"
+                            },
+                            "maxResults": {
+                                "type": "integer"
+                            },
+                            "totalCount": {
+                                "type": "integer"
+                            },
+                            "BillPayment": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/BillPayment"
+                                }
+                            }
+                        }
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "BillPayment": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string"
+                    },
+                    "SyncToken": {
+                        "type": "string"
+                    },
+                    "domain": {
+                        "type": "string"
+                    },
+                    "VendorRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "APAccountRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "CurrencyRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "DepartmentRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "TxnDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "TotalAmt": {
+                        "type": "number"
+                    },
+                    "DocNumber": {
+                        "type": "string"
+                    },
+                    "PrivateNote": {
+                        "type": "string"
+                    },
+                    "PayType": {
+                        "type": "string",
+                        "enum": [
+                            "Check",
+                            "CreditCard"
+                        ]
+                    },
+                    "ExchangeRate": {
+                        "type": "number"
+                    },
+                    "TransactionLocationType": {
+                        "type": "string"
+                    },
+                    "ProcessBillPayment": {
+                        "type": "boolean"
+                    },
+                    "PrintStatus": {
+                        "type": "string"
+                    },
+                    "MetaData": {
+                        "$ref": "#/components/schemas/MetaData"
+                    },
+                    "CheckPayment": {
+                        "type": "object",
+                        "properties": {
+                            "PrintStatus": {
+                                "type": "string"
+                            },
+                            "BankAccountRef": {
+                                "$ref": "#/components/schemas/ReferenceType"
+                            }
+                        }
+                    },
+                    "CreditCardPayment": {
+                        "type": "object",
+                        "properties": {
+                            "CCAccountRef": {
+                                "$ref": "#/components/schemas/ReferenceType"
+                            }
+                        }
+                    },
+                    "Line": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "Amount": {
+                                    "type": "number"
+                                },
+                                "LinkedTxn": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/LinkedTxn"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "QueryCustomersResponse": {
+                "type": "object",
+                "properties": {
+                    "QueryResponse": {
+                        "type": "object",
+                        "properties": {
+                            "Customer": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Customer"
+                                }
+                            },
+                            "startPosition": {
+                                "type": "integer"
+                            },
+                            "maxResults": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Customer": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string"
+                    },
+                    "SyncToken": {
+                        "type": "string"
+                    },
+                    "DisplayName": {
+                        "type": "string"
+                    },
+                    "Title": {
+                        "type": "string"
+                    },
+                    "GivenName": {
+                        "type": "string"
+                    },
+                    "MiddleName": {
+                        "type": "string"
+                    },
+                    "FamilyName": {
+                        "type": "string"
+                    },
+                    "Suffix": {
+                        "type": "string"
+                    },
+                    "PrimaryEmailAddr": {
+                        "type": "object",
+                        "properties": {
+                            "Address": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "PrimaryPhone": {
+                        "type": "object",
+                        "properties": {
+                            "FreeFormNumber": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "Mobile": {
+                        "type": "object",
+                        "properties": {
+                            "FreeFormNumber": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "AlternatePhone": {
+                        "type": "object",
+                        "properties": {
+                            "FreeFormNumber": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "Fax": {
+                        "type": "object",
+                        "properties": {
+                            "FreeFormNumber": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "CompanyName": {
+                        "type": "string"
+                    },
+                    "Job": {
+                        "type": "boolean"
+                    },
+                    "BillWithParent": {
+                        "type": "boolean"
+                    },
+                    "Balance": {
+                        "type": "number"
+                    },
+                    "BalanceWithJobs": {
+                        "type": "number"
+                    },
+                    "OpenBalanceDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "Taxable": {
+                        "type": "boolean"
+                    },
+                    "PreferredDeliveryMethod": {
+                        "type": "string"
+                    },
+                    "Notes": {
+                        "type": "string"
+                    },
+                    "WebAddr": {
+                        "type": "object",
+                        "properties": {
+                            "URI": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ARAccountRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "SalesTermRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "CustomerTypeRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "DefaultTaxCodeRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "ParentRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "CurrencyRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "PaymentMethodRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "MetaData": {
+                        "$ref": "#/components/schemas/MetaData"
+                    },
+                    "BillAddr": {
+                        "$ref": "#/components/schemas/PhysicalAddress"
+                    },
+                    "ShipAddr": {
+                        "$ref": "#/components/schemas/PhysicalAddress"
+                    },
+                    "PrintOnCheckName": {
+                        "type": "string"
+                    },
+                    "FullyQualifiedName": {
+                        "type": "string"
+                    },
+                    "Active": {
+                        "type": "boolean"
+                    },
+                    "sparse": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "PhysicalAddress": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string",
+                        "description": "System-generated address ID"
+                    },
+                    "Line1": {
+                        "type": "string",
+                        "maxLength": 500
+                    },
+                    "Line2": {
+                        "type": "string",
+                        "maxLength": 500
+                    },
+                    "Line3": {
+                        "type": "string",
+                        "maxLength": 500
+                    },
+                    "Line4": {
+                        "type": "string",
+                        "maxLength": 500
+                    },
+                    "Line5": {
+                        "type": "string",
+                        "maxLength": 500
+                    },
+                    "City": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "CountrySubDivisionCode": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "PostalCode": {
+                        "type": "string",
+                        "maxLength": 30
+                    },
+                    "Country": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "Lat": {
+                        "type": "string",
+                        "description": "Latitude coordinate",
+                        "readOnly": true
+                    },
+                    "Long": {
+                        "type": "string",
+                        "description": "Longitude coordinate",
+                        "readOnly": true
+                    },
+                    "FullyQualifiedName": {
+                        "type": "string",
+                        "description": "Fully qualified hierarchical address name",
+                        "readOnly": true
+                    },
+                    "Level": {
+                        "type": "integer",
+                        "description": "Hierarchy level (0 = top level)",
+                        "readOnly": true
+                    },
+                    "TaxExemptionReasonId": {
+                        "type": "integer",
+                        "description": "Reason ID for tax exemption (1–15)"
+                    }
+                }
+            },
+            "ReadCustomerResponse": {
+                "type": "object",
+                "properties": {
+                    "Customer": {
+                        "$ref": "#/components/schemas/Customer"
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The server timestamp of the response"
+                    }
+                }
+            },
+            "ReadBillPaymentResponse": {
+                "type": "object",
+                "properties": {
+                    "BillPayment": {
+                        "$ref": "#/components/schemas/BillPayment"
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "QueryVendorsResponse": {
+                "type": "object",
+                "properties": {
+                    "QueryResponse": {
+                        "type": "object",
+                        "properties": {
+                            "startPosition": {
+                                "type": "integer"
+                            },
+                            "maxResults": {
+                                "type": "integer"
+                            },
+                            "Vendor": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Vendor"
+                                }
+                            }
+                        }
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "ReadVendorResponse": {
+                "type": "object",
+                "properties": {
+                    "Vendor": {
+                        "$ref": "#/components/schemas/Vendor"
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Vendor": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string"
+                    },
+                    "SyncToken": {
+                        "type": "string"
+                    },
+                    "domain": {
+                        "type": "string"
+                    },
+                    "DisplayName": {
+                        "type": "string"
+                    },
+                    "PrintOnCheckName": {
+                        "type": "string"
+                    },
+                    "GivenName": {
+                        "type": "string"
+                    },
+                    "MiddleName": {
+                        "type": "string"
+                    },
+                    "FamilyName": {
+                        "type": "string"
+                    },
+                    "Suffix": {
+                        "type": "string"
+                    },
+                    "Title": {
+                        "type": "string"
+                    },
+                    "PrimaryEmailAddr": {
+                        "type": "object",
+                        "properties": {
+                            "Address": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "PrimaryPhone": {
+                        "type": "object",
+                        "properties": {
+                            "FreeFormNumber": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "Mobile": {
+                        "type": "object",
+                        "properties": {
+                            "FreeFormNumber": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "Fax": {
+                        "type": "object",
+                        "properties": {
+                            "FreeFormNumber": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "AlternatePhone": {
+                        "type": "object",
+                        "properties": {
+                            "FreeFormNumber": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "CompanyName": {
+                        "type": "string"
+                    },
+                    "Balance": {
+                        "type": "number"
+                    },
+                    "Active": {
+                        "type": "boolean"
+                    },
+                    "AcctNum": {
+                        "type": "string"
+                    },
+                    "WebAddr": {
+                        "type": "object",
+                        "properties": {
+                            "URI": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "BillAddr": {
+                        "$ref": "#/components/schemas/PhysicalAddress"
+                    },
+                    "MetaData": {
+                        "type": "object",
+                        "properties": {
+                            "CreateTime": {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            "LastUpdatedTime": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        }
+                    },
+                    "Vendor1099": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "ReadInvoiceResponse": {
+                "type": "object",
+                "properties": {
+                    "Invoice": {
+                        "$ref": "#/components/schemas/Invoice"
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Invoice": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string"
+                    },
+                    "SyncToken": {
+                        "type": "string"
+                    },
+                    "domain": {
+                        "type": "string"
+                    },
+                    "TxnDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "DueDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "PrintStatus": {
+                        "type": "string"
+                    },
+                    "TotalAmt": {
+                        "type": "number"
+                    },
+                    "Balance": {
+                        "type": "number"
+                    },
+                    "DocNumber": {
+                        "type": "string"
+                    },
+                    "ApplyTaxAfterDiscount": {
+                        "type": "boolean"
+                    },
+                    "Deposit": {
+                        "type": "number"
+                    },
+                    "EmailStatus": {
+                        "type": "string"
+                    },
+                    "CustomerMemo": {
+                        "type": "object",
+                        "properties": {
+                            "value": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "CustomerRef": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "value": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "ProjectRef": {
+                        "type": "object",
+                        "properties": {
+                            "value": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "SalesTermRef": {
+                        "type": "object",
+                        "properties": {
+                            "value": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "BillEmail": {
+                        "type": "object",
+                        "properties": {
+                            "Address": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "BillAddr": {
+                        "$ref": "#/components/schemas/PhysicalAddress"
+                    },
+                    "ShipAddr": {
+                        "$ref": "#/components/schemas/PhysicalAddress"
+                    },
+                    "Line": {
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        }
+                    },
+                    "TxnTaxDetail": {
+                        "type": "object",
+                        "properties": {
+                            "TotalTax": {
+                                "type": "number"
+                            },
+                            "TxnTaxCodeRef": {
+                                "type": "object",
+                                "properties": {
+                                    "value": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "TaxLine": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "MetaData": {
+                        "type": "object",
+                        "properties": {
+                            "CreateTime": {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            "LastUpdatedTime": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        }
+                    },
+                    "CustomField": {
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        }
+                    },
+                    "LinkedTxn": {
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "QueryInvoiceResponse": {
+                "type": "object",
+                "properties": {
+                    "QueryResponse": {
+                        "type": "object",
+                        "properties": {
+                            "startPosition": {
+                                "type": "integer"
+                            },
+                            "totalCount": {
+                                "type": "integer"
+                            },
+                            "maxResults": {
+                                "type": "integer"
+                            },
+                            "Invoice": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Invoice"
+                                }
+                            }
+                        }
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "TaxAgencyResponse": {
+                "type": "object",
+                "properties": {
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "TaxAgency": {
+                        "$ref": "#/components/schemas/TaxAgency"
+                    }
+                }
+            },
+            "TaxAgencyQueryResponse": {
+                "type": "object",
+                "properties": {
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "QueryResponse": {
+                        "type": "object",
+                        "properties": {
+                            "startPosition": {
+                                "type": "integer"
+                            },
+                            "totalCount": {
+                                "type": "integer"
+                            },
+                            "maxResults": {
+                                "type": "integer"
+                            },
+                            "TaxAgency": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/TaxAgency"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "TaxAgency": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string",
+                        "description": "Unique identifier for this TaxAgency"
+                    },
+                    "DisplayName": {
+                        "type": "string",
+                        "maxLength": 100
+                    },
+                    "SyncToken": {
+                        "type": "string"
+                    },
+                    "TaxTrackedOnSales": {
+                        "type": "boolean"
+                    },
+                    "TaxTrackedOnPurchases": {
+                        "type": "boolean"
+                    },
+                    "LastFileDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "TaxRegistrationNumber": {
+                        "type": "string"
+                    },
+                    "MetaData": {
+                        "$ref": "#/components/schemas/ModificationMetaData"
+                    },
+                    "TaxAgencyConfig": {
+                        "type": "string",
+                        "enum": [
+                            "USER_DEFINED",
+                            "SYSTEM_GENERATED"
+                        ]
+                    }
+                }
+            },
+            "ModificationMetaData": {
+                "type": "object",
+                "properties": {
+                    "CreateTime": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "LastUpdatedTime": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "PaymentQueryResponse": {
+                "type": "object",
+                "properties": {
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "QueryResponse": {
+                        "type": "object",
+                        "properties": {
+                            "startPosition": {
+                                "type": "integer"
+                            },
+                            "maxResults": {
+                                "type": "integer"
+                            },
+                            "Payment": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Payment"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "PaymentResponse": {
+                "type": "object",
+                "properties": {
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "Payment": {
+                        "$ref": "#/components/schemas/Payment"
+                    }
+                }
+            },
+            "Payment": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string"
+                    },
+                    "SyncToken": {
+                        "type": "string"
+                    },
+                    "domain": {
+                        "type": "string"
+                    },
+                    "TotalAmt": {
+                        "type": "number"
+                    },
+                    "UnappliedAmt": {
+                        "type": "number"
+                    },
+                    "TxnDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "ProcessPayment": {
+                        "type": "boolean"
+                    },
+                    "CustomerRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "ProjectRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "DepositToAccountRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "Line": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PaymentLine"
+                        }
+                    },
+                    "MetaData": {
+                        "$ref": "#/components/schemas/ModificationMetaData"
+                    }
+                }
+            },
+            "PaymentLine": {
+                "type": "object",
+                "properties": {
+                    "Amount": {
+                        "type": "number"
+                    },
+                    "LinkedTxn": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/LinkedTxn"
+                        }
+                    }
+                }
+            },
+            "ItemResponse": {
+                "type": "object",
+                "properties": {
+                    "Item": {
+                        "$ref": "#/components/schemas/Item"
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Item": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string"
+                    },
+                    "Name": {
+                        "type": "string"
+                    },
+                    "Type": {
+                        "type": "string"
+                    },
+                    "SyncToken": {
+                        "type": "string"
+                    },
+                    "Active": {
+                        "type": "boolean"
+                    },
+                    "TrackQtyOnHand": {
+                        "type": "boolean"
+                    },
+                    "QtyOnHand": {
+                        "type": "number"
+                    },
+                    "UnitPrice": {
+                        "type": "number"
+                    },
+                    "Description": {
+                        "type": "string"
+                    },
+                    "PurchaseCost": {
+                        "type": "number"
+                    },
+                    "AssetAccountRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "ExpenseAccountRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "IncomeAccountRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "ParentRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "SalesTaxCodeRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "PurchaseTaxCodeRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "ClassRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "ItemGroupDetail": {
+                        "type": "object",
+                        "properties": {
+                            "ItemGroupLine": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "Qty": {
+                                            "type": "integer"
+                                        },
+                                        "ItemRef": {
+                                            "$ref": "#/components/schemas/ReferenceType"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "MetaData": {
+                        "$ref": "#/components/schemas/ModificationMetaData"
+                    },
+                    "FullyQualifiedName": {
+                        "type": "string"
+                    },
+                    "SubItem": {
+                        "type": "boolean"
+                    },
+                    "Level": {
+                        "type": "integer"
+                    },
+                    "Taxable": {
+                        "type": "boolean"
+                    },
+                    "Sku": {
+                        "type": "string"
+                    }
+                }
+            },
+            "CompanyInfoResponse": {
+                "type": "object",
+                "properties": {
+                    "CompanyInfo": {
+                        "$ref": "#/components/schemas/CompanyInfo"
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "CompanyInfo": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string"
+                    },
+                    "SyncToken": {
+                        "type": "string"
+                    },
+                    "CompanyName": {
+                        "type": "string"
+                    },
+                    "LegalName": {
+                        "type": "string"
+                    },
+                    "Country": {
+                        "type": "string"
+                    },
+                    "FiscalYearStartMonth": {
+                        "type": "string"
+                    },
+                    "CompanyStartDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "EmployerId": {
+                        "type": "string"
+                    },
+                    "PrimaryPhone": {
+                        "type": "object",
+                        "properties": {
+                            "FreeFormNumber": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "Email": {
+                        "type": "object",
+                        "properties": {
+                            "Address": {
+                                "type": "string",
+                                "format": "email"
+                            }
+                        }
+                    },
+                    "WebAddr": {
+                        "type": "object",
+                        "properties": {
+                            "URI": {
+                                "type": "string",
+                                "format": "uri"
+                            }
+                        }
+                    },
+                    "CompanyAddr": {
+                        "$ref": "#/components/schemas/PhysicalAddress"
+                    },
+                    "LegalAddr": {
+                        "$ref": "#/components/schemas/PhysicalAddress"
+                    },
+                    "CustomerCommunicationAddr": {
+                        "$ref": "#/components/schemas/PhysicalAddress"
+                    },
+                    "SupportedLanguages": {
+                        "type": "string"
+                    },
+                    "NameValue": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "Name": {
+                                    "type": "string"
+                                },
+                                "Value": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "MetaData": {
+                        "type": "object",
+                        "properties": {
+                            "CreateTime": {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            "LastUpdatedTime": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        }
+                    }
+                }
+            },
+            "QueryEmployeeResponse": {
+                "type": "object",
+                "properties": {
+                    "QueryResponse": {
+                        "type": "object",
+                        "properties": {
+                            "Employee": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Employee"
+                                }
+                            },
+                            "startPosition": {
+                                "type": "integer"
+                            },
+                            "maxResults": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "EmployeeResponse": {
+                "type": "object",
+                "properties": {
+                    "Employee": {
+                        "$ref": "#/components/schemas/Employee"
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Employee": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string"
+                    },
+                    "SyncToken": {
+                        "type": "string"
+                    },
+                    "DisplayName": {
+                        "type": "string"
+                    },
+                    "GivenName": {
+                        "type": "string"
+                    },
+                    "MiddleName": {
+                        "type": "string"
+                    },
+                    "FamilyName": {
+                        "type": "string"
+                    },
+                    "Suffix": {
+                        "type": "string"
+                    },
+                    "Title": {
+                        "type": "string"
+                    },
+                    "PrintOnCheckName": {
+                        "type": "string"
+                    },
+                    "PrimaryEmailAddr": {
+                        "type": "object",
+                        "properties": {
+                            "Address": {
+                                "type": "string",
+                                "format": "email"
+                            }
+                        }
+                    },
+                    "PrimaryPhone": {
+                        "type": "object",
+                        "properties": {
+                            "FreeFormNumber": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "Mobile": {
+                        "type": "object",
+                        "properties": {
+                            "FreeFormNumber": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "SSN": {
+                        "type": "string"
+                    },
+                    "Active": {
+                        "type": "boolean"
+                    },
+                    "BillableTime": {
+                        "type": "boolean"
+                    },
+                    "Organization": {
+                        "type": "boolean"
+                    },
+                    "BillRate": {
+                        "type": "number"
+                    },
+                    "CostRate": {
+                        "type": "number"
+                    },
+                    "EmployeeNumber": {
+                        "type": "string"
+                    },
+                    "Gender": {
+                        "type": "string",
+                        "enum": [
+                            "Male",
+                            "Female"
+                        ]
+                    },
+                    "BirthDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "HiredDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "ReleasedDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "PrimaryAddr": {
+                        "$ref": "#/components/schemas/PhysicalAddress"
+                    },
+                    "MetaData": {
+                        "type": "object",
+                        "properties": {
+                            "CreateTime": {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            "LastUpdatedTime": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        }
+                    }
+                }
+            },
+            "Class": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string"
+                    },
+                    "SyncToken": {
+                        "type": "string"
+                    },
+                    "Name": {
+                        "type": "string"
+                    },
+                    "SubClass": {
+                        "type": "boolean"
+                    },
+                    "ParentRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "FullyQualifiedName": {
+                        "type": "string"
+                    },
+                    "Active": {
+                        "type": "boolean"
+                    },
+                    "MetaData": {
+                        "$ref": "#/components/schemas/MetaData"
+                    }
+                }
+            },
+            "ReadClassResponse": {
+                "type": "object",
+                "properties": {
+                    "Class": {
+                        "$ref": "#/components/schemas/Class"
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "QueryClassResponse": {
+                "type": "object",
+                "properties": {
+                    "QueryResponse": {
+                        "type": "object",
+                        "properties": {
+                            "Class": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Class"
+                                }
+                            },
+                            "startPosition": {
+                                "type": "integer"
+                            },
+                            "maxResults": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Department": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string"
+                    },
+                    "SyncToken": {
+                        "type": "string"
+                    },
+                    "Name": {
+                        "type": "string"
+                    },
+                    "SubDepartment": {
+                        "type": "boolean"
+                    },
+                    "ParentRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "FullyQualifiedName": {
+                        "type": "string"
+                    },
+                    "Active": {
+                        "type": "boolean"
+                    },
+                    "MetaData": {
+                        "$ref": "#/components/schemas/MetaData"
+                    }
+                }
+            },
+            "ReadDepartmentResponse": {
+                "type": "object",
+                "properties": {
+                    "Department": {
+                        "$ref": "#/components/schemas/Department"
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "QueryDepartmentResponse": {
+                "type": "object",
+                "properties": {
+                    "QueryResponse": {
+                        "type": "object",
+                        "properties": {
+                            "Department": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Department"
+                                }
+                            },
+                            "startPosition": {
+                                "type": "integer"
+                            },
+                            "maxResults": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "JournalEntry": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string"
+                    },
+                    "SyncToken": {
+                        "type": "string"
+                    },
+                    "DocNumber": {
+                        "type": "string"
+                    },
+                    "TxnDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "Line": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/JournalEntryLineDetail"
+                        }
+                    },
+                    "MetaData": {
+                        "$ref": "#/components/schemas/MetaData"
+                    }
+                }
+            },
+            "JournalEntryLineDetail": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string"
+                    },
+                    "Description": {
+                        "type": "string"
+                    },
+                    "Amount": {
+                        "type": "number"
+                    },
+                    "DetailType": {
+                        "type": "string"
+                    },
+                    "PostingType": {
+                        "type": "string"
+                    },
+                    "AccountRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    }
+                }
+            },
+            "ReadJournalEntryResponse": {
+                "type": "object",
+                "properties": {
+                    "JournalEntry": {
+                        "$ref": "#/components/schemas/JournalEntry"
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "QueryJournalEntryResponse": {
+                "type": "object",
+                "properties": {
+                    "QueryResponse": {
+                        "type": "object",
+                        "properties": {
+                            "JournalEntry": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/JournalEntry"
+                                }
+                            },
+                            "startPosition": {
+                                "type": "integer"
+                            },
+                            "maxResults": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Estimate": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string"
+                    },
+                    "SyncToken": {
+                        "type": "string"
+                    },
+                    "TxnDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "DocNumber": {
+                        "type": "string"
+                    },
+                    "PrivateNote": {
+                        "type": "string"
+                    },
+                    "CustomerRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "CustomerMemo": {
+                        "type": "object",
+                        "properties": {
+                            "value": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "BillAddr": {
+                        "$ref": "#/components/schemas/PhysicalAddress"
+                    },
+                    "ShipAddr": {
+                        "$ref": "#/components/schemas/PhysicalAddress"
+                    },
+                    "ClassRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "SalesTermRef": {
+                        "$ref": "#/components/schemas/ReferenceType"
+                    },
+                    "TotalAmt": {
+                        "type": "number"
+                    },
+                    "ApplyTaxAfterDiscount": {
+                        "type": "boolean"
+                    },
+                    "PrintStatus": {
+                        "type": "string"
+                    },
+                    "EmailStatus": {
+                        "type": "string"
+                    },
+                    "BillEmail": {
+                        "type": "object",
+                        "properties": {
+                            "Address": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "TxnStatus": {
+                        "type": "string"
+                    },
+                    "Line": {
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        }
+                    },
+                    "MetaData": {
+                        "$ref": "#/components/schemas/MetaData"
+                    }
+                }
+            },
+            "ReadEstimateResponse": {
+                "type": "object",
+                "properties": {
+                    "Estimate": {
+                        "$ref": "#/components/schemas/Estimate"
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "QueryEstimateResponse": {
+                "type": "object",
+                "properties": {
+                    "QueryResponse": {
+                        "type": "object",
+                        "properties": {
+                            "Estimate": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Estimate"
+                                }
+                            },
+                            "startPosition": {
+                                "type": "integer"
+                            },
+                            "maxResults": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Preferences": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "string"
+                    },
+                    "SyncToken": {
+                        "type": "string"
+                    },
+                    "AccountingInfoPrefs": {
+                        "type": "object"
+                    },
+                    "ProductAndServicesPrefs": {
+                        "type": "object"
+                    },
+                    "SalesFormsPrefs": {
+                        "type": "object"
+                    },
+                    "EmailMessagesPrefs": {
+                        "type": "object"
+                    },
+                    "VendorAndPurchasesPrefs": {
+                        "type": "object"
+                    },
+                    "TimeTrackingPrefs": {
+                        "type": "object"
+                    },
+                    "TaxPrefs": {
+                        "type": "object"
+                    },
+                    "CurrencyPrefs": {
+                        "type": "object"
+                    },
+                    "ReportPrefs": {
+                        "type": "object"
+                    },
+                    "OtherPrefs": {
+                        "type": "object"
+                    }
+                }
+            },
+            "ProfitAndLossReport": {
+                "type": "object",
+                "properties": {
+                    "Header": {
+                        "type": "object"
+                    },
+                    "Columns": {
+                        "type": "object"
+                    },
+                    "Rows": {
+                        "type": "object"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,284 @@
+{
+  "Account": {
+    "description": "Represents an account in the chart of accounts, used for tracking transactions.",
+    "fields": {
+      "Id": { "type": "string", "description": "Unique identifier for this object. Read-only, system-defined." },
+      "MetaData_CreateTime": { "type": "datetime", "description": "The time the record was created." },
+      "MetaData_LastUpdatedTime": { "type": "datetime", "description": "The time the record was last updated." },
+      "Name": { "type": "string", "description": "User-recognizable name for the account. Must be unique. Required." },
+      "SubAccount": { "type": "boolean", "description": "Whether the account is a sub-account." },
+      "ParentRef": { "type": "object", "description": "Reference to the parent account if this is a sub-account." },
+      "Description": { "type": "string", "description": "User-entered description for the account." },
+      "CurrentBalance": { "type": "decimal", "description": "The current balance of the account." },
+      "Active": { "type": "boolean", "description": "Whether the account is active. Inactive accounts are hidden and cannot be posted to." },
+      "Classification": { "type": "string", "description": "The classification of the account (e.g., Asset, Liability)." },
+      "AccountType": { "type": "string", "description": "The type of the account (e.g., Bank, Accounts Receivable)." }
+    }
+  },
+  "Bill": {
+    "description": "Represents a bill from a vendor.",
+    "fields": {
+      "Id": { "type": "string", "description": "Unique identifier for this object. Read-only, system-defined." },
+      "MetaData_CreateTime": { "type": "datetime", "description": "The time the record was created." },
+      "MetaData_LastUpdatedTime": { "type": "datetime", "description": "The time the record was last updated." },
+      "DocNumber": { "type": "string", "description": "Reference number for the transaction. Also known as the bill number." },
+      "TxnDate": { "type": "date", "description": "The date of the transaction. Format: 'YYYY-MM-DD'." },
+      "VendorRef": { "type": "object", "description": "Reference to the vendor for this transaction." },
+      "APAccountRef": { "type": "object", "description": "Reference to the Accounts Payable (A/P) account." },
+      "TotalAmt": { "type": "decimal", "description": "The total amount of the bill." },
+      "SalesTermRef": { "type": "object", "description": "Reference to the sales term." },
+      "DueDate": { "type": "date", "description": "The date when the payment is due." },
+      "Balance": { "type": "decimal", "description": "The remaining balance of the bill." }
+    }
+  },
+  "BillPayment": {
+    "description": "Represents a payment for a bill.",
+    "fields": {
+      "Id": { "type": "string", "description": "Unique identifier for the payment. Read-only, system-defined." },
+      "MetaData_CreateTime": { "type": "datetime", "description": "The time the record was created." },
+      "MetaData_LastUpdatedTime": { "type": "datetime", "description": "The time the record was last updated." },
+      "DocNumber": { "type": "string", "description": "Reference number for the transaction." },
+      "TxnDate": { "type": "date", "description": "The date of the transaction. Format: 'YYYY-MM-DD'." },
+      "VendorRef": { "type": "object", "description": "Reference to the vendor." },
+      "APAccountRef": { "type": "object", "description": "Reference to the Accounts Payable (A/P) account." },
+      "CreditCardPayment_CCAccountRef": { "type": "object", "description": "Reference to the credit card account used for payment." },
+      "TotalAmt": { "type": "decimal", "description": "The total amount of the payment." }
+    }
+  },
+  "Customer": {
+    "description": "Represents a customer, who can be a person or an organization.",
+    "fields": {
+      "Id": { "type": "string", "description": "Unique identifier for this object. Read-only, system-defined." },
+      "MetaData_CreateTime": { "type": "datetime", "description": "The time the record was created." },
+      "MetaData_LastUpdatedTime": { "type": "datetime", "description": "The time the record was last updated." },
+      "GivenName": { "type": "string", "description": "Given name or first name of the person." },
+      "FamilyName": { "type": "string", "description": "Family name or last name of the person." },
+      "Suffix": { "type": "string", "description": "Suffix of the name (e.g., Jr., Sr.)." },
+      "DisplayName": { "type": "string", "description": "The name of the customer as displayed. Must be unique. Conditionally required." },
+      "CompanyName": { "type": "string", "description": "Name of the customer's company." },
+      "PrintOnCheckName": { "type": "string", "description": "Name of the customer as it should appear on a check." },
+      "Balance": { "type": "decimal", "description": "The outstanding balance for the customer." },
+      "Active": { "type": "boolean", "description": "Whether the customer is active." }
+    }
+  },
+  "Vendor": {
+    "description": "Represents a vendor or supplier.",
+    "fields": {
+      "Id": { "type": "string", "description": "Unique identifier for this object. Read-only, system-defined." },
+      "MetaData_CreateTime": { "type": "datetime", "description": "The time the record was created." },
+      "MetaData_LastUpdatedTime": { "type": "datetime", "description": "The time the record was last updated." },
+      "GivenName": { "type": "string", "description": "Given name or first name of the contact person." },
+      "MiddleName": { "type": "string", "description": "Middle name of the contact person." },
+      "FamilyName": { "type": "string", "description": "Family name or last name of the contact person." },
+      "Suffix": { "type": "string", "description": "Suffix of the name (e.g., Jr., Sr.)." },
+      "DisplayName": { "type": "string", "description": "The name of the vendor as displayed. Must be unique." },
+      "CompanyName": { "type": "string", "description": "Name of the vendor's company." },
+      "PrintOnCheckName": { "type": "string", "description": "Name of the vendor as it should appear on a check." },
+      "Balance": { "type": "decimal", "description": "The outstanding balance for the vendor." },
+      "Active": { "type": "boolean", "description": "Whether the vendor is active." }
+    }
+  },
+  "Invoice": {
+    "description": "Represents a sales invoice.",
+    "fields": {
+      "Id": { "type": "string", "description": "Unique identifier for this object. Read-only, system-defined." },
+      "MetaData_CreateTime": { "type": "datetime", "description": "The time the record was created." },
+      "MetaData_LastUpdatedTime": { "type": "datetime", "description": "The time the record was last updated." },
+      "DocNumber": { "type": "string", "description": "Reference number for the transaction." },
+      "TxnDate": { "type": "date", "description": "The date of the transaction." },
+      "TotalAmt": { "type": "decimal", "description": "The total amount of the invoice." },
+      "Balance": { "type": "decimal", "description": "The remaining balance of the invoice." },
+      "CustomerRef": { "type": "object", "description": "Reference to the customer." },
+      "ClassRef": { "type": "object", "description": "Reference to the class." },
+      "DueDate": { "type": "date", "description": "The date when the payment is due." }
+    }
+  },
+  "TaxAgency": {
+    "description": "Represents a tax agency to whom sales and purchase taxes are paid.",
+    "fields": {
+      "Id": { "type": "string", "description": "Unique identifier for this object. Read-only, system-defined." },
+      "MetaData_CreateTime": { "type": "datetime", "description": "The time the record was created." },
+      "MetaData_LastUpdatedTime": { "type": "datetime", "description": "The time the record was last updated." },
+      "DisplayName": { "type": "string", "description": "The name of the tax agency as displayed." },
+      "TaxTrackedOnPurchases": { "type": "boolean", "description": "Whether tax is tracked on purchases for this agency." },
+      "TaxTrackedOnSales": { "type": "boolean", "description": "Whether tax is tracked on sales for this agency." }
+    }
+  },
+  "Payment": {
+    "description": "Represents a payment received from a customer.",
+    "fields": {
+      "Id": { "type": "string", "description": "Unique identifier for this object. Read-only, system-defined." },
+      "MetaData_CreateTime": { "type": "datetime", "description": "The time the record was created." },
+      "MetaData_LastUpdatedTime": { "type": "datetime", "description": "The time the record was last updated." },
+      "PaymentRefNum": { "type": "string", "description": "The reference number for the payment." },
+      "TotalAmt": { "type": "decimal", "description": "The total amount of the payment." },
+      "TxnDate": { "type": "date", "description": "The date of the transaction." },
+      "CustomerRef": { "type": "object", "description": "Reference to the customer." }
+    }
+  },
+  "Item": {
+    "description": "Represents a product or service that a company buys or sells.",
+    "fields": {
+      "Id": { "type": "string", "description": "Unique identifier for this object. Read-only, system-defined." },
+      "MetaData_CreateTime": { "type": "datetime", "description": "The time the record was created." },
+      "MetaData_LastUpdatedTime": { "type": "datetime", "description": "The time the record was last updated." },
+      "Name": { "type": "string", "description": "The name of the item." },
+      "ParentRef": { "type": "object", "description": "Reference to the parent item if this is a sub-item." },
+      "PrefVendorRef": { "type": "object", "description": "Reference to the preferred vendor." },
+      "UnitPrice": { "type": "decimal", "description": "The unit price of the item." },
+      "Type": { "type": "string", "description": "The type of the item (e.g., Inventory, Service)." },
+      "QtyOnHand": { "type": "decimal", "description": "The quantity of the item on hand." },
+      "Active": { "type": "boolean", "description": "Whether the item is active." },
+      "Sku": { "type": "string", "description": "The Stock Keeping Unit (SKU) of the item." }
+    }
+  },
+  "CompanyInfo": {
+    "description": "Represents company information.",
+    "fields": {}
+  },
+  "Employee": {
+    "description": "Represents an employee.",
+    "fields": {
+      "Id": { "type": "string", "description": "Unique identifier for this object. Read-only, system-defined." },
+      "MetaData_CreateTime": { "type": "datetime", "description": "The time the record was created." },
+      "MetaData_LastUpdatedTime": { "type": "datetime", "description": "The time the record was last updated." },
+      "EmployeeNumber": { "type": "string", "description": "The employee number." },
+      "GivenName": { "type": "string", "description": "Given name or first name of the employee." },
+      "MiddleName": { "type": "string", "description": "Middle name of the employee." },
+      "FamilyName": { "type": "string", "description": "Family name or last name of the employee." },
+      "DisplayName": { "type": "string", "description": "The name of the employee as displayed." },
+      "Active": { "type": "boolean", "description": "Whether the employee is active." }
+    }
+  },
+  "Estimate": {
+    "type": "object",
+    "properties": {
+      "Id": {
+        "type": "string"
+      },
+      "SyncToken": {
+        "type": "string"
+      },
+      "TxnDate": {
+        "type": "string",
+        "format": "date"
+      },
+      "DocNumber": {
+        "type": "string"
+      },
+      "PrivateNote": {
+        "type": "string"
+      },
+      "CustomerRef": {
+        "$ref": "#/definitions/ReferenceType"
+      },
+      "CustomerMemo": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "BillAddr": {
+        "$ref": "#/definitions/PhysicalAddress"
+      },
+      "ShipAddr": {
+        "$ref": "#/definitions/PhysicalAddress"
+      },
+      "ClassRef": {
+        "$ref": "#/definitions/ReferenceType"
+      },
+      "SalesTermRef": {
+        "$ref": "#/definitions/ReferenceType"
+      },
+      "TotalAmt": {
+        "type": "number"
+      },
+      "ApplyTaxAfterDiscount": {
+        "type": "boolean"
+      },
+      "PrintStatus": {
+        "type": "string"
+      },
+      "EmailStatus": {
+        "type": "string"
+      },
+      "BillEmail": {
+        "type": "object",
+        "properties": {
+          "Address": {
+            "type": "string"
+          }
+        }
+      },
+      "TxnStatus": {
+        "type": "string"
+      },
+      "Line": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "MetaData": {
+        "$ref": "#/definitions/MetaData"
+      }
+    }
+  },
+  "Preferences": {
+    "type": "object",
+    "properties": {
+      "Id": {
+        "type": "string"
+      },
+      "SyncToken": {
+        "type": "string"
+      },
+      "AccountingInfoPrefs": {
+        "type": "object"
+      },
+      "ProductAndServicesPrefs": {
+        "type": "object"
+      },
+      "SalesFormsPrefs": {
+        "type": "object"
+      },
+      "EmailMessagesPrefs": {
+        "type": "object"
+      },
+      "VendorAndPurchasesPrefs": {
+        "type": "object"
+      },
+      "TimeTrackingPrefs": {
+        "type": "object"
+      },
+      "TaxPrefs": {
+        "type": "object"
+      },
+      "CurrencyPrefs": {
+        "type": "object"
+      },
+      "ReportPrefs": {
+        "type": "object"
+      },
+      "OtherPrefs": {
+        "type": "object"
+      }
+    }
+  },
+  "ProfitAndLossReport": {
+    "type": "object",
+    "properties": {
+      "Header": {
+        "type": "object"
+      },
+      "Columns": {
+        "type": "object"
+      },
+      "Rows": {
+        "type": "object"
+      }
+    }
+  }
+}

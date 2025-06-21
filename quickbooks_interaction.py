@@ -4,12 +4,20 @@ from requests.auth import HTTPBasicAuth
 from environment import Environment
 
 class QuickBooksSession:
-    def __init__(self):
+    def __init__(self):        
+        # Get credentials from environment variables
         self.client_id = Environment.get('QUICKBOOKS_CLIENT_ID')
         self.client_secret = Environment.get('QUICKBOOKS_CLIENT_SECRET')
         self.refresh_token = Environment.get('QUICKBOOKS_REFRESH_TOKEN')
         self.company_id = Environment.get('QUICKBOOKS_COMPANY_ID')
-        self.base_url = f"https://sandbox-quickbooks.api.intuit.com/v3/company/{self.company_id}"
+        # Set base URL based on environment
+        env = Environment.get('QUICKBOOKS_ENV', 'sandbox').lower()
+        base_urls = {
+            'production': 'https://quickbooks.api.intuit.com',
+            'sandbox': 'https://sandbox-quickbooks.api.intuit.com'
+        }
+        self.base_url = base_urls.get(env, base_urls['sandbox'])
+        
         self.token_url = "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer"
         self.access_token = None
         self.refresh_access_token()
@@ -45,15 +53,17 @@ class QuickBooksSession:
             print(message, file=sys.stderr)
             raise Exception(message)
 
-    def call_route(self, method_type, route, body: dict = None):
+    def call_route(self, method_type, route, params: dict = None, body: dict = None):
         method = getattr(requests, method_type)
         if not route.startswith('/'):
             route = '/' + route
+        
+        url = f"{self.base_url}/v3/company/{self.company_id}{route}"
 
         if method_type == 'get':
-            response = method(f"{self.base_url}{route}", params=body, headers=self._get_headers())
+            response = method(url, params=params, headers=self._get_headers())
         else:
-            response = method(f"{self.base_url}{route}", json=body, headers=self._get_headers())
+            response = method(url, json=body, params=params, headers=self._get_headers())
 
         if response.status_code == 200:
             return response.json()
@@ -62,7 +72,11 @@ class QuickBooksSession:
             self.refresh_access_token()
             print('Refreshed the access token', file=sys.stderr)
 
-            response = method(f"{self.base_url}{route}", json=body, headers=self._get_headers())
+            if method_type == 'get':
+                response = method(url, params=params, headers=self._get_headers())
+            else:
+                response = method(url, json=body, params=params, headers=self._get_headers())
+            
             if response.status_code == 200:
                 return response.json()
             else:
@@ -76,7 +90,7 @@ class QuickBooksSession:
 
     def query(self, query: str):
         """Execute a QuickBooks query."""
-        return self.call_route('get', '/query', {'query': query})
+        return self.call_route('get', '/query', params={'query': query})
 
     def get_account(self, account_id: str):
         """Get a specific account by ID."""
